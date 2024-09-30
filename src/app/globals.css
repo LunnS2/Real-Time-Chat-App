@@ -2,26 +2,114 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: 40, 100%, 97%; /* Soft pastel cream */
+    --foreground: 220, 15%, 20%; /* Muted dark color for text */
+
+    --container: 40, 100%, 98%; /* Lighter pastel cream for containers */
+    --left-panel: 230, 60%, 95%; /* Light pastel indigo for the left panel */
+
+    --gray-primary: 40, 80%, 95%; /* Very light pastel cream */
+    --gray-secondary: 40, 70%, 90%; /* Slightly darker pastel cream */
+
+    --chat-hover: 230, 60%, 97%; /* Soft pastel indigo hover color */
+    --left-panel: 230, 60%, 95%; /* Light pastel indigo */
+
+    --indigo-primary: 230, 100%, 80%; /* Soft pastel indigo */
+    --indigo-chat: 230, 80%, 90%; /* Light pastel indigo for chat bubbles */
+
+    --card: 40, 100%, 98%; /* Light cream for cards */
+    --card-foreground: 220, 15%, 20%; /* Soft muted dark text */
+
+    --popover: 40, 100%, 98%; /* Cream popover background */
+    --popover-foreground: 220, 15%, 20%; /* Same muted dark text for popover */
+
+    --primary: 230, 60%, 85%; /* Pastel indigo as the primary color */
+    --primary-foreground: 40, 100%, 98%; /* Light cream for text on primary */
+
+    --secondary: 230, 60%, 90%; /* Light pastel indigo for secondary elements */
+    --secondary-foreground: 220, 15%, 20%; /* Muted dark text on secondary */
+
+    --muted: 230, 60%, 95%; /* Very light pastel indigo for muted elements */
+    --muted-foreground: 220, 15%, 30%; /* Muted dark text color */
+
+    --accent: 230, 80%, 90%; /* Light pastel indigo */
+    --accent-foreground: 220, 15%, 20%; /* Darker text for accents */
+
+    --destructive: 0, 60%, 60%; /* Soft pastel red for destructive actions */
+    --destructive-foreground: 40, 100%, 98%; /* Light cream for destructive text */
+
+    --border: 230, 70%, 95%; /* Light pastel indigo for borders */
+    --input: 40, 100%, 95%; /* Light cream for input backgrounds */
+    --ring: 230, 60%, 50%; /* Soft pastel indigo for focus rings */
+
+    --radius: 0.5rem; /* Keep consistent border radius */
+  }
+
+  .dark {
+    --background: 230, 25%, 15%; /* Muted dark indigo */
+    --foreground: 230, 90%, 98%; /* Very light pastel for text */
+
+    --container: 230, 25%, 20%; /* Dark muted indigo for containers */
+
+    --gray-primary: 230, 30%, 20%; /* Dark gray-indigo for primary text */
+    --gray-secondary: 230, 30%, 25%; /* Slightly lighter muted indigo-gray */
+
+    --left-panel: 230, 35%, 20%; /* Dark muted indigo for left panel */
+    --chat-hover: 230, 30%, 25%; /* Darker pastel hover effect */
+
+    --indigo-primary: 230, 50%, 60%; /* Muted pastel indigo */
+    --indigo-secondary: 230, 50%, 65%; /* Slightly lighter pastel indigo */
+    --indigo-chat: 230, 40%, 40%; /* Deeper pastel indigo for chat bubbles */
+
+    --gray-tertiary: 230, 35%, 30%; /* Darker gray-indigo for tertiary elements */
+
+    --card: 230, 30%, 25%; /* Dark muted indigo for cards */
+    --card-foreground: 230, 90%, 98%; /* Light pastel text for cards */
+
+    --popover: 230, 30%, 25%; /* Dark muted indigo for popovers */
+    --popover-foreground: 230, 90%, 98%; /* Light pastel text for popovers */
+
+    --primary: 230, 90%, 98%; /* Very light pastel indigo for primary elements */
+    --primary-foreground: 230, 35%, 35%; /* Darker muted indigo text */
+
+    --secondary: 230, 35%, 25%; /* Darker muted indigo for secondary elements */
+    --secondary-foreground: 230, 90%, 98%; /* Light pastel text on secondary */
+
+    --muted: 230, 30%, 25%; /* Dark muted indigo for muted elements */
+    --muted-foreground: 230, 50%, 70%; /* Light muted indigo text color */
+
+    --accent: 230, 30%, 25%; /* Dark indigo accent */
+    --accent-foreground: 230, 90%, 98%; /* Light pastel text on accents */
+
+    --destructive: 0, 50%, 50%; /* Muted red for destructive actions */
+    --destructive-foreground: 230, 90%, 98%; /* Light pastel text for destructive */
+
+    --border: 230, 30%, 30%; /* Darker indigo for borders */
+    --input: 230, 30%, 30%; /* Darker input fields */
+    --ring: 230, 50%, 50%; /* Soft pastel indigo for focus rings */
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
+@layer components {
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--gray-primary));
+    border-radius: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: hsl(var(--container));
   }
 }
