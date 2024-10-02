@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    --background: 40, 100%, 97%; /* Soft pastel cream */
+    --background: 230, 40%, 65%; /* Very light pastel indigo */
     --foreground: 220, 15%, 20%; /* Muted dark color for text */
 
     --container: 40, 100%, 98%; /* Lighter pastel cream for containers */
     --left-panel: 230, 60%, 95%; /* Light pastel indigo for the left panel */
 
-    --gray-primary: 40, 80%, 95%; /* Very light pastel cream */
-    --gray-secondary: 40, 70%, 90%; /* Slightly darker pastel cream */
+    --gray-primary: 230, 80%, 90%;; /* Very light pastel indigo */
+    --gray-secondary: 230, 40%, 90%; /* Slightly darker pastel indigo */
 
     --chat-hover: 230, 60%, 97%; /* Soft pastel indigo hover color */
     --left-panel: 230, 60%, 95%; /* Light pastel indigo */
