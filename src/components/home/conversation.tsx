@@ -15,7 +15,7 @@ const Conversation = ({ conversation }: { conversation: any }) => {
 			<div className={`flex gap-2 items-center p-3 hover:bg-chat-hover cursor-pointer `}>
 				<Avatar className='border border-gray-900 overflow-visible relative'>
 					{conversation.isOnline && (
-						<div className='absolute top-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-foreground' />
+						<div className='absolute top-0 right-0 w-2.5 h-2.5 bg-indigo-500 rounded-full border-2 border-foreground' />
 					)}
 					<AvatarImage src={conversationImage || "/placeholder.png"} className='object-cover rounded-full' />
 					<AvatarFallback>

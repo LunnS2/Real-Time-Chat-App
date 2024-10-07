@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -15,6 +16,7 @@ import { ImageIcon, MessageSquareDiff } from "lucide-react";
 import { Id } from "../../../convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
+import toast from "react-hot-toast";
 
 const UserListDialog = () => {
   const [selectedUsers, setSelectedUsers] = useState<Id<"users">[]>([]);
@@ -23,8 +25,10 @@ const UserListDialog = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [renderedImage, setRenderedImage] = useState("");
   const imgRef = useRef<HTMLInputElement>(null);
+  const dialogCloseRef = useRef<HTMLButtonElement>(null);
 
   const createConversation = useMutation(api.conversations.createConversation);
+  const generateUploadUrl = useMutation(api.conversations.generateUploadUrl);
   const me = useQuery(api.users.getMe);
   const users = useQuery(api.users.getUsers);
 
@@ -42,9 +46,31 @@ const UserListDialog = () => {
           isGroup: false
         });
       } else {
+        const postUrl = await generateUploadUrl();
 
+        const result = await fetch(postUrl, {
+          method: "POST",
+          headers: {"Content-Type": selectedImage?.type!},
+          body: selectedImage,
+        })
+
+        const {storageId} = await result.json();
+        await createConversation({
+          participants: [...selectedUsers, me?._id!],
+          isGroup: true,
+          admin: me?._id!,
+          groupName,
+          groupImage: storageId,
+        })
       }
+      dialogCloseRef.current?.click();
+      setSelectedUsers([]);
+      setGroupName("");
+      setSelectedImage(null);
+
+      //TODO: Update a global state called "selectedConversationId"
     } catch (err) {
+      toast.error("Failed to create conversation");
       console.error(err);
     } finally {
       setIsLoading(false)
@@ -66,6 +92,7 @@ const UserListDialog = () => {
       <DialogContent>
         <DialogHeader>
           {/* TODO: <DialogClose /> will be here */}
+          <DialogClose ref={dialogCloseRef}/>
           <DialogTitle>USERS</DialogTitle>
         </DialogHeader>
 
@@ -96,7 +123,7 @@ const UserListDialog = () => {
               onChange={(e) => setGroupName(e.target.value)}
             />
             <Button
-              className="flex gap-2"
+              className="flex gap-2 hover:bg-indigo-200"
               onClick={() => imgRef.current?.click()}
             >
               <ImageIcon size={20} />
@@ -123,7 +150,7 @@ const UserListDialog = () => {
             >
               <Avatar className="overflow-visible">
                 {user.isOnline && (
-                  <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-white rounded-full border-2 border-foreground" />
+                  <div className="absolute top-0 right-0 w-2.5 h-2.5 bg-indigo-500 rounded-full border-2 border-foreground" />
                 )}
 
                 <AvatarImage
