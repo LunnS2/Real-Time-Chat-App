@@ -9,9 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/backend": "^1.13.8",
-    "@clerk/clerk-sdk-node": "^5.0.48",
-    "@clerk/nextjs": "^5.7.1",
+    "@clerk/backend": "^1.14.1",
+    "@clerk/clerk-sdk-node": "^5.0.52",
+    "@clerk/nextjs": "^5.7.5",
     "@radix-ui/react-avatar": "^1.1.0",
     "@radix-ui/react-dialog": "^1.1.2",
     "@radix-ui/react-dropdown-menu": "^2.1.1",

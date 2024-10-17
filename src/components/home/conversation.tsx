@@ -12,13 +12,16 @@ const Conversation = ({ conversation }: { conversation: any }) => {
 	const lastMessage = conversation.lastMessage;
 	const lastMessageType = lastMessage?.messageType;
 	const me = useQuery(api.users.getMe);
-	
-	const {setSelectedConversation, selectedConversation} = useConversationStore();
-	const activeBgClass = selectedConversation?._id === conversation._id 
+
+	const { setSelectedConversation, selectedConversation } = useConversationStore();
+	const activeBgClass = selectedConversation?._id === conversation._id;
 
 	return (
 		<>
-			<div className={`flex gap-2 items-center p-3 hover:bg-chat-hover cursor-pointer ${activeBgClass ? "bg-gray-secondary" : ""} `}
+			<div
+				className={`flex gap-2 items-center p-3 hover:bg-chat-hover cursor-pointer
+					${activeBgClass ? "bg-gray-tertiary" : ""}
+				`}
 				onClick={() => setSelectedConversation(conversation)}
 			>
 				<Avatar className='border border-gray-900 overflow-visible relative'>
@@ -32,8 +35,8 @@ const Conversation = ({ conversation }: { conversation: any }) => {
 				</Avatar>
 				<div className='w-full'>
 					<div className='flex items-center'>
-						<h3 className='text-xs lg:text-sm font-medium'>{conversationName}</h3>
-						<span className='text-[10px] lg:text-xs text-gray-500 ml-auto'>
+						<h3 className='text-sm font-medium'>{conversationName}</h3>
+						<span className='text-xs text-gray-500 ml-auto'>
 							{formatDate(lastMessage?._creationTime || conversation._creationTime)}
 						</span>
 					</div>
@@ -41,10 +44,12 @@ const Conversation = ({ conversation }: { conversation: any }) => {
 						{lastMessage?.sender === me?._id ? <MessageSeenSvg /> : ""}
 						{conversation.isGroup && <Users size={16} />}
 						{!lastMessage && "Say Hi!"}
-						{lastMessageType === "text" ? lastMessage?.content.length > 30 ? (
-							<span className='text-xs'>{lastMessage?.content.slice(0, 30)}...</span>
-						) : (
-							<span className='text-xs'>{lastMessage?.content}</span>
+						{lastMessageType === "text" ? (
+							lastMessage?.content.length > 30 ? (
+								<span>{lastMessage?.content.slice(0, 30)}...</span>
+							) : (
+								<span>{lastMessage?.content}</span>
+							)
 						) : null}
 						{lastMessageType === "image" && <ImageIcon size={16} />}
 						{lastMessageType === "video" && <VideoIcon size={16} />}
