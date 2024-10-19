@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Video, X } from "lucide-react";
+import { X } from "lucide-react";
 import MessageInput from "./message-input";
 import MessageContainer from "./message-container";
 import ChatPlaceHolder from "@/components/home/chat-placeholder";
@@ -47,9 +47,6 @@ const RightPanel = () => {
           </div>
 
           <div className="flex items-center gap-7 mr-5">
-            <a href="/video-call" target="_blank">
-              <Video size={23} />
-            </a>
             <X
               size={16}
               className="cursor-pointer"

@@ -122,3 +122,51 @@ export const kickUser = mutation({
 export const generateUploadUrl = mutation(async (ctx) => {
 	return await ctx.storage.generateUploadUrl();
 });
+
+export const exitConversation = mutation({
+  args: {
+    conversationId: v.id("conversations"),
+  },
+  handler: async (ctx, args) => {
+    // Get user identity to determine who is trying to exit
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new ConvexError("Unauthorized");
+
+    // Find the current user in the users collection
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_tokenIdentifier", (q) => q.eq("tokenIdentifier", identity.tokenIdentifier))
+      .unique();
+
+    if (!user) throw new ConvexError("User not found");
+
+    // Fetch the conversation to verify that the user is a participant
+    const conversation = await ctx.db
+      .query("conversations")
+      .filter((q) => q.eq(q.field("_id"), args.conversationId))
+      .unique();
+
+    if (!conversation) throw new ConvexError("Conversation not found");
+
+    // Check if the user is a participant
+    if (!conversation.participants.includes(user._id)) {
+      throw new ConvexError("User is not part of this conversation");
+    }
+
+    // Remove the user from the list of participants
+    const updatedParticipants = conversation.participants.filter((id) => id !== user._id);
+
+    // If the conversation is now empty, you can optionally delete it
+    if (updatedParticipants.length === 0 && !conversation.isGroup) {
+      await ctx.db.delete(args.conversationId);
+      return { message: "Conversation deleted as no participants remain." };
+    }
+
+    // Otherwise, update the conversation with the remaining participants
+    await ctx.db.patch(args.conversationId, {
+      participants: updatedParticipants,
+    });
+
+    return { message: "You have exited the conversation." };
+  },
+});
