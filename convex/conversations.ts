@@ -5,6 +5,7 @@ export const createConversation = mutation({
 	args: {
 		participants: v.array(v.id("users")),
 		isGroup: v.boolean(),
+		name: v.string(),
 		groupName: v.optional(v.string()),
 		groupImage: v.optional(v.id("_storage")),
 		admin: v.optional(v.id("users")),
@@ -36,6 +37,7 @@ export const createConversation = mutation({
 		const conversationId = await ctx.db.insert("conversations", {
 			participants: args.participants,
 			isGroup: args.isGroup,
+			name: args.name,
 			groupName: args.groupName,
 			groupImage,
 			admin: args.admin,
