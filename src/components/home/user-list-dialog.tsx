@@ -132,7 +132,7 @@ const UserListDialog = () => {
 							value={groupName}
 							onChange={(e) => setGroupName(e.target.value)}
 						/>
-						<Button className='flex gap-2 hover:bg-gray-primary' onClick={() => imgRef.current?.click()}>
+						<Button className='flex gap-2 hover:bg-indigo-200' onClick={() => imgRef.current?.click()}>
 							<ImageIcon size={20} />
 							Group Image
 						</Button>
@@ -176,6 +176,7 @@ const UserListDialog = () => {
 					<Button variant={"outline"}>Cancel</Button>
 					<Button
 						onClick={handleCreateConversation}
+						className="hover:bg-indigo-200"
 						disabled={selectedUsers.length === 0 || (selectedUsers.length > 1 && !groupName) || isLoading}
 					>
 						{/* spinner */}

@@ -5,7 +5,7 @@ export const createConversation = mutation({
 	args: {
 		participants: v.array(v.id("users")),
 		isGroup: v.boolean(),
-		name: v.string(),
+		name: v.optional(v.string()),
 		groupName: v.optional(v.string()),
 		groupImage: v.optional(v.id("_storage")),
 		admin: v.optional(v.id("users")),
