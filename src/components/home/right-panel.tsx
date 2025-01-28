@@ -1,6 +1,6 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { X } from "lucide-react";
+import { Loader, X } from "lucide-react";
 import MessageInput from "./message-input";
 import MessageContainer from "./message-container";
 import ChatPlaceHolder from "@/components/home/chat-placeholder";
@@ -9,21 +9,18 @@ import { useConversationStore } from "@/store/chat-store";
 import { useConvexAuth } from "convex/react";
 
 const RightPanel = () => {
-  const { selectedConversation, setSelectedConversation } =
-    useConversationStore();
+  const { selectedConversation, setSelectedConversation } = useConversationStore();
   const { isLoading } = useConvexAuth();
 
-  if (isLoading) return null;
+  if (isLoading) return <Loader className="animate-spin"/>;
   if (!selectedConversation) return <ChatPlaceHolder />;
 
-  const conversationName =
-    selectedConversation.groupName || selectedConversation.name;
-  const conversationImage =
-    selectedConversation.groupImage || selectedConversation.image;
+  const conversationName = selectedConversation.groupName || selectedConversation.name;
+  const conversationImage = selectedConversation.groupImage || selectedConversation.image;
 
   return (
     <div className="w-3/4 flex flex-col">
-      <div className="w-full sticky top-0 z-50">
+      <div className="w-full sticky top-0">
         {/* Header */}
         <div className="flex justify-between bg-gray-primary p-3">
           <div className="flex gap-3 items-center">
@@ -63,4 +60,5 @@ const RightPanel = () => {
     </div>
   );
 };
+
 export default RightPanel;

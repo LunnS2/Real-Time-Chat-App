@@ -188,7 +188,7 @@ const MediaImageDialog = ({
             />
           )}
           <Button
-            className="w-full"
+            className="w-full hover:bg-indigo-200"
             disabled={isLoading}
             onClick={handleSendImage}
           >
