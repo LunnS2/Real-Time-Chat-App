@@ -177,18 +177,21 @@ const MediaImageDialog = ({
         if (!isOpen) onClose();
       }}
     >
-      <DialogContent>
-        <DialogDescription className="flex flex-col gap-10 justify-center items-center">
+      <DialogContent className="max-w-lg p-4 rounded-lg shadow-lg">
+        <DialogDescription className="flex flex-col gap-6 justify-center items-center">
           {renderedImage && (
-            <Image
-              src={renderedImage}
-              width={300}
-              height={300}
-              alt="selected image"
-            />
+            <div className="w-full max-w-md rounded-md shadow overflow-hidden">
+              <Image
+                src={renderedImage}
+                width={280}
+                height={280}
+                alt="selected image"
+                className="w-full h-auto"
+              />
+            </div>
           )}
           <Button
-            className="w-full hover:bg-indigo-200"
+            className="w-full py-2 hover:bg-indigo-200 rounded-md"
             disabled={isLoading}
             onClick={handleSendImage}
           >
@@ -226,15 +229,21 @@ const MediaVideoDialog = ({
         if (!isOpen) onClose();
       }}
     >
-      <DialogContent>
-        <DialogDescription>Video</DialogDescription>
-        <div className="w-full">
-          {renderedVideo && (
-            <ReactPlayer url={renderedVideo} controls width="100%" />
-          )}
-        </div>
+      <DialogContent className="max-w-lg p-4 rounded-lg shadow-lg flex flex-col items-center">
+        <DialogDescription className="mb-4 text-lg font-semibold" />
+        {renderedVideo && (
+          <div className="w-full max-w-md aspect-video rounded-md shadow overflow-hidden">
+            <ReactPlayer
+              url={renderedVideo}
+              controls
+              width="100%"
+              height="100%"
+            />
+          </div>
+        )}
+
         <Button
-          className="w-full hover:bg-indigo-200"
+          className="w-full mt-4 py-2 hover:bg-indigo-200 rounded-md"
           disabled={isLoading}
           onClick={handleSendVideo}
         >

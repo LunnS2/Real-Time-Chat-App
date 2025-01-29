@@ -101,19 +101,18 @@ export default ChatBubble;
 
 const VideoMessage = ({ message }: { message: IMessage }) => {
   return (
-    <div className="relative w-full max-w-xs rounded overflow-hidden">
+    <div className="w-[250px] h-[250px] m-2 flex justify-center items-center rounded-lg overflow-hidden bg-black">
       <ReactPlayer
         url={message.content}
         width="100%"
         height="100%"
         controls
-        className="rounded-lg"
+        className="rounded-lg object-cover"
         light={true}
       />
     </div>
   );
 };
-
 
 const ImageMessage = ({
   message,
@@ -123,7 +122,7 @@ const ImageMessage = ({
   handleClick: () => void;
 }) => {
   return (
-    <div className="w-[250px] h-[250px] m-2 relative">
+    <div className="w-[250px] h-[250px] m-2 flex justify-center items-center relative">
       <Image
         src={message.content}
         fill
@@ -134,6 +133,7 @@ const ImageMessage = ({
     </div>
   );
 };
+
 
 const ImageDialog = ({
   src,
