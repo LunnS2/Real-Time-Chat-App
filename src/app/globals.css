@@ -113,3 +113,10 @@
     background-color: hsl(var(--container));
   }
 }
+
+@layer base {
+  * {
+    scrollbar-width: thin; /* Makes scrollbar thin */
+    scrollbar-color: #99aaff #c2c9f0; /* (thumb color, track color) */
+  }
+}
