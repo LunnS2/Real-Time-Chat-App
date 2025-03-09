@@ -1,3 +1,5 @@
+// real-time-chat-app\src\components\home\left-panel.tsx
+
 "use client";
 import { Loader, Search } from "lucide-react";
 import { Input } from "../ui/input";
@@ -12,10 +14,23 @@ import { useConversationStore } from "@/store/chat-store";
 
 const LeftPanel = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
-  const conversations = useQuery(api.conversations.getMyConversations, isAuthenticated ? undefined : "skip");
+
+  // Show a loading indicator while authentication state is loading
+  if (isLoading) {
+    return (
+      <div>
+        <Loader className="animate-spin" />
+      </div>
+    );
+  }
+
+  // Fetch conversations only if authenticated
+  const conversations = useQuery(
+    api.conversations.getMyConversations,
+    isAuthenticated ? undefined : "skip"
+  );
 
   const { selectedConversation, setSelectedConversation } = useConversationStore();
-
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
@@ -30,7 +45,14 @@ const LeftPanel = () => {
     return conversationName.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  if (isLoading || !conversations) return null;
+  // Display loading if conversations are not available yet
+  if (!conversations) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <Loader className="animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="w-1/4 border-gray-600 border-r">

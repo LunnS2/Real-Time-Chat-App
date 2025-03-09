@@ -1,3 +1,5 @@
+// real-time-chat-app\src\app\page.tsx
+
 import LeftPanel from "@/components/home/left-panel";
 import RightPanel from "@/components/home/right-panel";
 

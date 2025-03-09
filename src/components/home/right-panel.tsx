@@ -1,3 +1,5 @@
+// real-time-chat-app\src\components\home\right-panel.tsx
+
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Loader, X } from "lucide-react";

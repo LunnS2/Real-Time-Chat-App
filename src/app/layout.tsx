@@ -1,3 +1,5 @@
+// real-time-chat-app\src\app\layout.tsx
+
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
