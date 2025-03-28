@@ -7,10 +7,16 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription } from "../ui/dialog";
 import ReactPlayer from "react-player";
 import ChatAvatarActions from "./chat-avatar-actions";
+import { Id } from "../../../convex/_generated/dataModel";
 
 type ChatBubbleProps = {
   message: IMessage;
-  me: any;
+  me: {
+    _id: Id<"users">;
+    name: string;
+    isOnline?: boolean;
+    image?: string;
+  };
   previousMessage?: IMessage;
 };
 
@@ -48,7 +54,6 @@ const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
     return (
       <>
         <DateIndicator message={message} previousMessage={previousMessage} />
-
         <div className="flex gap-1 w-2/3">
           <ChatBubbleAvatar
             isGroup={isGroup}
@@ -74,10 +79,10 @@ const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
       </>
     );
   }
+
   return (
     <>
       <DateIndicator message={message} previousMessage={previousMessage} />
-
       <div className="flex gap-1 w-2/3 ml-auto">
         <div
           className={`flex z-20 max-w-fit px-2 pt-1 rounded-md shadow-md ml-auto relative ${bgClass}`}
@@ -97,22 +102,20 @@ const ChatBubble = ({ me, message, previousMessage }: ChatBubbleProps) => {
     </>
   );
 };
-export default ChatBubble;
 
-const VideoMessage = ({ message }: { message: IMessage }) => {
-  return (
-    <div className="w-[250px] h-[250px] m-2 flex justify-center items-center rounded-lg overflow-hidden bg-black">
-      <ReactPlayer
-        url={message.content}
-        width="100%"
-        height="100%"
-        controls
-        className="rounded-lg object-cover"
-        light={true}
-      />
-    </div>
-  );
-};
+// Helper components remain the same as before
+const VideoMessage = ({ message }: { message: IMessage }) => (
+  <div className="w-[250px] h-[250px] m-2 flex justify-center items-center rounded-lg overflow-hidden bg-black">
+    <ReactPlayer
+      url={message.content}
+      width="100%"
+      height="100%"
+      controls
+      className="rounded-lg object-cover"
+      light={true}
+    />
+  </div>
+);
 
 const ImageMessage = ({
   message,
@@ -120,20 +123,17 @@ const ImageMessage = ({
 }: {
   message: IMessage;
   handleClick: () => void;
-}) => {
-  return (
-    <div className="w-[250px] h-[250px] m-2 flex justify-center items-center relative">
-      <Image
-        src={message.content}
-        fill
-        className="cursor-pointer object-cover rounded"
-        alt="image"
-        onClick={handleClick}
-      />
-    </div>
-  );
-};
-
+}) => (
+  <div className="w-[250px] h-[250px] m-2 flex justify-center items-center relative">
+    <Image
+      src={message.content}
+      fill
+      className="cursor-pointer object-cover rounded"
+      alt="image"
+      onClick={handleClick}
+    />
+  </div>
+);
 
 const ImageDialog = ({
   src,
@@ -143,35 +143,26 @@ const ImageDialog = ({
   open: boolean;
   src: string;
   onClose: () => void;
-}) => {
-  return (
-    <Dialog
-      open={open}
-      onOpenChange={(isOpen) => {
-        if (!isOpen) onClose();
-      }}
-    >
-      <DialogContent className="min-w-[750px]">
-        <DialogDescription className="relative h-[450px] flex justify-center">
-          <Image
-            src={src}
-            fill
-            className="rounded-lg object-contain"
-            alt="image"
-          />
-        </DialogDescription>
-      </DialogContent>
-    </Dialog>
-  );
-};
+}) => (
+  <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
+    <DialogContent className="min-w-[750px]">
+      <DialogDescription className="relative h-[450px] flex justify-center">
+        <Image
+          src={src}
+          fill
+          className="rounded-lg object-contain"
+          alt="image"
+        />
+      </DialogDescription>
+    </DialogContent>
+  </Dialog>
+);
 
-const MessageTime = ({ time, fromMe }: { time: string; fromMe: boolean }) => {
-  return (
-    <p className="text-[10px] mt-2 self-end flex gap-1 items-center">
-      {time} {fromMe && <MessageSeenSvg />}
-    </p>
-  );
-};
+const MessageTime = ({ time, fromMe }: { time: string; fromMe: boolean }) => (
+  <p className="text-[10px] mt-2 self-end flex gap-1 items-center">
+    {time} {fromMe && <MessageSeenSvg />}
+  </p>
+);
 
 const OtherMessageIndicator = () => (
   <div className="absolute bg-white dark:bg-gray-primary top-0 -left-[4px] w-3 h-3 rounded-bl-full" />
@@ -182,22 +173,19 @@ const SelfMessageIndicator = () => (
 );
 
 const TextMessage = ({ message }: { message: IMessage }) => {
-  const isLink = /^(ftp|http|https):\/\/[^ "]+$/.test(message.content); // Check if the content is a URL
-
-  return (
-    <div>
-      {isLink ? (
-        <a
-          href={message.content}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`mr-2 text-sm font-light text-blue-400 underline`}
-        >
-          {message.content}
-        </a>
-      ) : (
-        <p className={`mr-2 text-sm font-light`}>{message.content}</p>
-      )}
-    </div>
+  const isLink = /^(ftp|http|https):\/\/[^ "]+$/.test(message.content);
+  return isLink ? (
+    <a
+      href={message.content}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="mr-2 text-sm font-light text-blue-400 underline"
+    >
+      {message.content}
+    </a>
+  ) : (
+    <p className="mr-2 text-sm font-light">{message.content}</p>
   );
 };
+
+export default ChatBubble;

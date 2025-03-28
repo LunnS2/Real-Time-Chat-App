@@ -4,10 +4,16 @@ import { Ban, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "../../../convex/_generated/api";
 import React from "react";
+import { Id } from "../../../convex/_generated/dataModel";
 
 type ChatAvatarActionsProps = {
   message: IMessage;
-  me: any;
+  me: {
+    _id: Id<"users">;
+    name: string;
+    isOnline?: boolean;
+    image?: string;
+  };
 };
 
 const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
@@ -21,7 +27,7 @@ const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
   const createConversation = useMutation(api.conversations.createConversation);
   const isGroup = selectedConversation?.isGroup;
 
-  const handleKickUser = async (e: React.MouseEvent) => {
+  const handleKickUser = async (e: React.MouseEvent<SVGSVGElement>) => {
     e.stopPropagation();
     if (!selectedConversation) return;
     try {
@@ -36,7 +42,7 @@ const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
           (id) => id !== message.sender._id
         ),
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to kick user");
     }
   };
@@ -56,7 +62,7 @@ const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
         isOnline: message.sender.isOnline,
         image: message.sender.image,
       });
-    } catch (error) {
+    } catch {
       toast.error("Failed to create conversation");
     }
   };
@@ -79,4 +85,5 @@ const ChatAvatarActions = ({ me, message }: ChatAvatarActionsProps) => {
     </div>
   );
 };
+
 export default ChatAvatarActions;
