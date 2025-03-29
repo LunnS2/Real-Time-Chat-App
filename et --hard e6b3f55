@@ -1,0 +1,34 @@
+[33m25a7083[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m schema updates
+[33meb19289[m Fix: Font paths
+[33m8299718[m Solving dependency issues
+[33mc821f7b[m Fix: ESLint and React Hook Errors
+[33m012783f[m Fix dependencies
+[33m3608d46[m Fix hydratation issues
+[33me6b3f55[m Add custom scrollbar
+[33m1034522[m Update Logo and Name
+[33m3244bb2[m small fix
+[33m3457c03[m Update UI; Add auto-scroll to message container
+[33m64ea2b0[m Subtle UI updates; Bebug; Handle loading states;Add light field to VideoMessage
+[33m80b5ea8[m Update http.ts: Implement session.removed
+[33mf52c808[m Update UI
+[33md595d99[m Update UI; Debug
+[33m9e4fb44[m Debug: Update schema
+[33m4e886dd[m Add search bar functionality; Subtle UI updates
+[33mfaadb6e[m Add mutation and front-end logic to exit conversation
+[33m3806be4[m Debug; Apply cursor-pointer to clickable elements; Subtle UI updates
+[33ma75021e[m Add Kick user functionality
+[33maec4f40[m Add SendImage and SendVideo mutations
+[33ma97de2b[m Add getMessages query
+[33md592b3c[m Add sendTextMsg Mutation
+[33mea6e08e[m Add getGroupMembers query
+[33m1bd8d39[m Update conversation functionality; Add getMyConversations query
+[33m7cccccc[m Update group group creation functionality; Update conversations.ts
+[33m9a258e6[m Update schema; Add new table; Update UI
+[33m88c2465[m Delete schema and tables created for learning purposes; Set up Clerk for authentification; Update Schema and Tables; Implement webhooks to enable communication between Convex and Clerk
+[33mdc93fcb[m Learn and set up Convex; link it to the dashboard to test functionality
+[33m8bebfa5[m Update UI
+[33m8a0292d[m Update UI; Add dummy-data to be replaced in the future for DB Data; Install new dependencies
+[33mb06e76d[m Delete old creations form last commit; Update Tailwind files; Install new packages; Add public folder; Start theme toggle functionality
+[33mfada160[m Add and initialize dashboard/page.tsx and Button UI component
+[33mc4af5b0[m first commit
+[33m57fefb0[m Initial commit from Create Next App

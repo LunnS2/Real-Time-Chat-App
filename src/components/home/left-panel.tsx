@@ -7,7 +7,7 @@ import { UserButton } from "@clerk/nextjs";
 import UserListDialog from "./user-list-dialog";
 import { useConvexAuth, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useConversationStore } from "@/store/chat-store";
 
 const LeftPanel = () => {
@@ -18,19 +18,27 @@ const LeftPanel = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  // Reset selected conversation if it's not in the list of conversations
   useEffect(() => {
-    const conversationIds = conversations?.map((conversation) => conversation._id);
-    if (selectedConversation && conversationIds && !conversationIds.includes(selectedConversation._id)) {
-      setSelectedConversation(null);
+    if (conversations) {
+      const conversationIds = conversations.map((conversation) => conversation._id);
+      if (selectedConversation && !conversationIds.includes(selectedConversation._id)) {
+        setSelectedConversation(null);
+      }
     }
   }, [conversations, selectedConversation, setSelectedConversation]);
 
-  const filteredConversations = conversations?.filter((conversation) => {
-    const conversationName = conversation.groupName || conversation.name || "";
-    return conversationName.toLowerCase().includes(searchTerm.toLowerCase());
-  });
+  // Memoize filtered conversations based on search term
+  const filteredConversations = useMemo(() => {
+    return conversations?.filter((conversation) => {
+      const conversationName = conversation.groupName || conversation.name || "";
+      return conversationName.toLowerCase().includes(searchTerm.toLowerCase());
+    });
+  }, [conversations, searchTerm]);
 
-  if (isLoading || !conversations) return null;
+  // Display loading state or no conversations state
+  if (isLoading) return <div className="p-3 text-center">Loading...</div>;
+  if (!conversations || conversations.length === 0) return <div className="p-3 text-center">No conversations available.</div>;
 
   return (
     <div className="w-1/4 border-gray-600 border-r">
