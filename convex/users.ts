@@ -74,7 +74,8 @@ export const getUsers = query({
 	handler: async (ctx, args) => {
 		const identity = await ctx.auth.getUserIdentity();
 		if (!identity) {
-			throw new ConvexError("Unauthorized");
+			// Return empty array instead of throwing
+			return [];
 		}
 
 		const users = await ctx.db.query("users").collect();
@@ -87,7 +88,8 @@ export const getMe = query({
 	handler: async (ctx, args) => {
 		const identity = await ctx.auth.getUserIdentity();
 		if (!identity) {
-			throw new ConvexError("Unauthorized");
+			// Return null instead of throwing
+			return null;
 		}
 
 		const user = await ctx.db
@@ -96,7 +98,8 @@ export const getMe = query({
 			.unique();
 
 		if (!user) {
-			throw new ConvexError("User not found");
+			// Return null instead of throwing
+			return null;
 		}
 
 		return user;
@@ -109,7 +112,8 @@ export const getGroupMembers = query({
 		const identity = await ctx.auth.getUserIdentity();
 
 		if (!identity) {
-			throw new ConvexError("Unauthorized");
+			// Return empty array instead of throwing
+			return [];
 		}
 
 		const conversation = await ctx.db
@@ -117,7 +121,8 @@ export const getGroupMembers = query({
 			.filter((q) => q.eq(q.field("_id"), args.conversationId))
 			.first();
 		if (!conversation) {
-			throw new ConvexError("Conversation not found");
+			// Return empty array instead of throwing
+			return [];
 		}
 
 		const users = await ctx.db.query("users").collect();

@@ -18,7 +18,6 @@ const LeftPanel = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Reset selected conversation if it's not in the list of conversations
   useEffect(() => {
     if (conversations) {
       const conversationIds = conversations.map((conversation) => conversation._id);
@@ -28,7 +27,6 @@ const LeftPanel = () => {
     }
   }, [conversations, selectedConversation, setSelectedConversation]);
 
-  // Memoize filtered conversations based on search term
   const filteredConversations = useMemo(() => {
     return conversations?.filter((conversation) => {
       const conversationName = conversation.groupName || conversation.name || "";
@@ -36,7 +34,6 @@ const LeftPanel = () => {
     });
   }, [conversations, searchTerm]);
 
-  // Display loading state or no conversations state
   if (isLoading) return <div className="p-3 text-center">Loading...</div>;
   if (!conversations || conversations.length === 0) return <div className="p-3 text-center">No conversations available.</div>;
 
