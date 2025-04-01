@@ -35,7 +35,6 @@ const LeftPanel = () => {
   }, [conversations, searchTerm]);
 
   if (isLoading) return <div className="p-3 text-center">Loading...</div>;
-  if (!conversations || conversations.length === 0) return <div className="p-3 text-center">No conversations available.</div>;
 
   return (
     <div className="w-1/4 border-gray-600 border-r">
