@@ -33,9 +33,7 @@ const MediaDropdown = () => {
   const handleSendImage = async () => {
     setIsLoading(true);
     try {
-      // Step 1: Get a short-lived upload URL
       const postUrl = await generateUploadUrl();
-      // Step 2: POST the file to the URL
       const result = await fetch(postUrl, {
         method: "POST",
         headers: { "Content-Type": selectedImage!.type },
@@ -43,7 +41,7 @@ const MediaDropdown = () => {
       });
 
       const { storageId } = await result.json();
-      // Step 3: Save the newly allocated storage id to the database
+
       await sendImage({
         conversation: selectedConversation!._id,
         imgId: storageId,
@@ -78,6 +76,7 @@ const MediaDropdown = () => {
 
       setSelectedVideo(null);
     } catch (error) {
+      toast.error("Failed to send video");
     } finally {
       setIsLoading(false);
     }
@@ -88,7 +87,7 @@ const MediaDropdown = () => {
       <input
         type="file"
         ref={imageInput}
-        accept="image/*"
+        accept="image/png, image/jpeg, image/jpg, image/gif, image/webp"
         onChange={(e) => setSelectedImage(e.target.files![0])}
         hidden
       />
@@ -177,10 +176,10 @@ const MediaImageDialog = ({
         if (!isOpen) onClose();
       }}
     >
-      <DialogContent className="max-w-lg p-4 rounded-lg shadow-lg">
-        <DialogDescription className="flex flex-col gap-6 justify-center items-center">
+      <DialogContent className="max-w-lg max-h-[90vh] p-4 rounded-lg shadow-lg flex flex-col">
+        <DialogDescription className="flex-1 overflow-y-auto max-h-[70vh] flex justify-center items-center">
           {renderedImage && (
-            <div className="w-full max-w-md rounded-md shadow overflow-hidden">
+            <div className="max-w-md rounded-md shadow overflow-hidden">
               <Image
                 src={renderedImage}
                 width={280}
@@ -190,14 +189,14 @@ const MediaImageDialog = ({
               />
             </div>
           )}
-          <Button
-            className="w-full py-2 hover:bg-indigo-200 rounded-md"
-            disabled={isLoading}
-            onClick={handleSendImage}
-          >
-            {isLoading ? "Sending..." : "Send"}
-          </Button>
         </DialogDescription>
+        <Button
+          className="w-full py-2 mt-4 hover:bg-indigo-200 rounded-md"
+          disabled={isLoading}
+          onClick={handleSendImage}
+        >
+          {isLoading ? "Sending..." : "Send"}
+        </Button>
       </DialogContent>
     </Dialog>
   );
@@ -218,9 +217,7 @@ const MediaVideoDialog = ({
   isLoading,
   handleSendVideo,
 }: MediaVideoDialogProps) => {
-  const renderedVideo = URL.createObjectURL(
-    new Blob([selectedVideo], { type: "video/mp4" })
-  );
+  const renderedVideo = URL.createObjectURL(selectedVideo);
 
   return (
     <Dialog
