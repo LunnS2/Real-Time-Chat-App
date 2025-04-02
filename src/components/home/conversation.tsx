@@ -1,4 +1,3 @@
-// real-time-chat-app\src\components\home\conversation.tsx
 import { formatDate } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { MessageSeenSvg } from "@/lib/svgs";
@@ -7,6 +6,17 @@ import { useMutation, useQuery, useConvexAuth } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useConversationStore } from "@/store/chat-store";
 import { useState } from "react";
+import {
+  Dialog,
+  DialogTrigger,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 const Conversation = ({ conversation }: { conversation: any }) => {
   const conversationImage = conversation.groupImage || conversation.image;
@@ -59,14 +69,29 @@ const Conversation = ({ conversation }: { conversation: any }) => {
           </AvatarFallback>
         </Avatar>
         <div className="flex text-left gap-7 mr-5">
-          <X
-            size={16}
-            className="cursor-pointer rounded-full hover:bg-indigo-300"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowConfirmation(true);
-            }}
-          />
+          <Dialog>
+            <DialogTrigger asChild>
+              <X
+                size={16}
+                className="cursor-pointer rounded-full hover:bg-indigo-300"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Exit Conversation</DialogTitle>
+                <DialogDescription>
+                  Are you sure you want to exit this conversation?
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button className="hover:bg-indigo-200" onClick={handleExitConversation}>Exit</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
         <div className="w-full">
           <div className="flex items-center">
@@ -94,31 +119,6 @@ const Conversation = ({ conversation }: { conversation: any }) => {
         </div>
       </div>
       <hr className="h-[1px] mx-10 bg-gray-primary" />
-
-      {/* Confirmation modal */}
-      {showConfirmation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-gray-secondary p-6 rounded-lg shadow-lg">
-            <h2 className="text-lg font-semibold mb-4">
-              Are you sure you want to exit this conversation?
-            </h2>
-            <div className="flex gap-4 justify-center">
-              <button
-                className="px-4 py-2 bg-indigo-primary rounded-md hover:bg-indigo-300"
-                onClick={() => setShowConfirmation(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="px-4 py-2 bg-indigo-primary rounded-md hover:bg-indigo-300"
-                onClick={handleExitConversation}
-              >
-                Exit
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </>
   );
 };
