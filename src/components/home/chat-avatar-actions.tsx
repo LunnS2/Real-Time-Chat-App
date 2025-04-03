@@ -7,7 +7,7 @@ import { Id } from "../../../convex/_generated/dataModel";
 import React from "react";
 
 type User = {
-  _id: Id<"users">; // Use Convex's Id type
+  _id: Id<"users">;
   name: string;
   isOnline: boolean;
   image?: string;
