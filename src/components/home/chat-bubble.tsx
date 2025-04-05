@@ -7,10 +7,18 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription } from "../ui/dialog";
 import ReactPlayer from "react-player";
 import ChatAvatarActions from "./chat-avatar-actions";
+import { Id } from "../../../convex/_generated/dataModel";
+
+type User = {
+  _id: Id<"users">;
+  name: string;
+  isOnline: boolean;
+  image?: string;
+};
 
 type ChatBubbleProps = {
   message: IMessage;
-  me: any;
+  me: User;
   previousMessage?: IMessage;
 };
 
