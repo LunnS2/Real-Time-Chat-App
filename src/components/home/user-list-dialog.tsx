@@ -37,6 +37,11 @@ const UserListDialog = () => {
 	const { setSelectedConversation } = useConversationStore();
 
 	const handleCreateConversation = async () => {
+		if (!me) {
+			toast.error("User not authenticated");
+			return;
+		}
+
 		if (selectedUsers.length === 0) return;
 		setIsLoading(true);
 		try {
@@ -45,24 +50,29 @@ const UserListDialog = () => {
 			let conversationId;
 			if (!isGroup) {
 				conversationId = await createConversation({
-					participants: [...selectedUsers, me?._id!],
+					participants: [...selectedUsers, me._id],
 					isGroup: false,
 				});
 			} else {
+				if (!selectedImage) {
+					toast.error("Please select a group image");
+					return;
+				}
+
 				const postUrl = await generateUploadUrl();
 
 				const result = await fetch(postUrl, {
 					method: "POST",
-					headers: { "Content-Type": selectedImage?.type! },
+					headers: { "Content-Type": selectedImage.type || "application/octet-stream" },
 					body: selectedImage,
 				});
 
 				const { storageId } = await result.json();
 
 				conversationId = await createConversation({
-					participants: [...selectedUsers, me?._id!],
+					participants: [...selectedUsers, me._id],
 					isGroup: true,
-					admin: me?._id!,
+					admin: me._id,
 					groupName,
 					groupImage: storageId,
 				});
@@ -73,16 +83,19 @@ const UserListDialog = () => {
 			setGroupName("");
 			setSelectedImage(null);
 
-			// TODO => Update a global state called "selectedConversation"
-			const conversationName = isGroup ? groupName : users?.find((user) => user._id === selectedUsers[0])?.name;
+			const conversationName = isGroup 
+				? groupName 
+				: users?.find((user) => user._id === selectedUsers[0])?.name || "";
 
 			setSelectedConversation({
 				_id: conversationId,
 				participants: selectedUsers,
 				isGroup,
-				image: isGroup ? renderedImage : users?.find((user) => user._id === selectedUsers[0])?.image,
+				image: isGroup 
+					? renderedImage 
+					: users?.find((user) => user._id === selectedUsers[0])?.image || "",
 				name: conversationName,
-				admin: me?._id!,
+				admin: me._id,
 			});
 		} catch (err) {
 			toast.error("Failed to create conversation");
@@ -106,7 +119,6 @@ const UserListDialog = () => {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader>
-					{/* TODO: <DialogClose /> will be here */}
 					<DialogClose ref={dialogCloseRef} />
 					<DialogTitle>USERS</DialogTitle>
 				</DialogHeader>
@@ -117,13 +129,12 @@ const UserListDialog = () => {
 						<Image src={renderedImage} fill alt='user image' className='rounded-full object-cover' />
 					</div>
 				)}
-				{/* TODO: input file */}
 				<input
 					type='file'
 					accept='image/*'
 					ref={imgRef}
 					hidden
-					onChange={(e) => setSelectedImage(e.target.files![0])}
+					onChange={(e) => e.target.files?.[0] && setSelectedImage(e.target.files[0])}
 				/>
 				{selectedUsers.length > 1 && (
 					<>
@@ -179,9 +190,8 @@ const UserListDialog = () => {
 						className="hover:bg-indigo-200"
 						disabled={selectedUsers.length === 0 || (selectedUsers.length > 1 && !groupName) || isLoading}
 					>
-						{/* spinner */}
 						{isLoading ? (
-							<div className='w-5 h-5 border-t-2 border-b-2  rounded-full animate-spin' />
+							<div className='w-5 h-5 border-t-2 border-b-2 rounded-full animate-spin' />
 						) : (
 							"Create"
 						)}

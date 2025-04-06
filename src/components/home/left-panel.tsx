@@ -1,5 +1,5 @@
 "use client";
-import { Loader, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "../ui/input";
 import ThemeSwitch from "./theme-switch";
 import Conversation from "./conversation";

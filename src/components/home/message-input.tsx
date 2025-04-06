@@ -1,4 +1,4 @@
-import { Laugh, Mic, Plus, Send } from "lucide-react";
+import { Laugh, Send } from "lucide-react";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { Button } from "../ui/button";
@@ -13,7 +13,9 @@ import MediaDropdown from "./media-dropdown";
 const MessageInput = () => {
 	const [msgText, setMsgText] = useState("");
 	const { selectedConversation } = useConversationStore();
-	const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible(false);
+	
+	// Fixed line: Added explicit HTMLDivElement type
+	const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible<HTMLDivElement>(false);
 
 	const me = useQuery(api.users.getMe);
 	const sendTextMsg = useMutation(api.messages.sendTextMessage);
@@ -21,18 +23,27 @@ const MessageInput = () => {
 	const handleSendTextMsg = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			await sendTextMsg({ content: msgText, conversation: selectedConversation!._id, sender: me!._id });
+			if (!selectedConversation?._id || !me?._id) {
+				toast.error("Missing conversation or user data");
+				return;
+			}
+			
+			await sendTextMsg({ 
+				content: msgText, 
+				conversation: selectedConversation._id, 
+				sender: me._id 
+			});
 			setMsgText("");
-		} catch (err: any) {
-			toast.error(err.message);
-			console.error(err);
+		} catch (err) {
+			const error = err as Error;
+			toast.error(error.message);
+			console.error(error);
 		}
 	};
 
 	return (
 		<div className='bg-gray-primary p-2 flex gap-4 items-center'>
 			<div className='relative flex gap-2 ml-2'>
-				{/* EMOJI PICKER WILL GO HERE */}
 				<div ref={ref} onClick={() => setIsComponentVisible(true)}>
 					{isComponentVisible && (
 						<EmojiPicker
@@ -58,22 +69,14 @@ const MessageInput = () => {
 					/>
 				</div>
 				<div className='mr-4 flex items-center gap-3'>
-					{msgText.length > 0 ? (
-						<Button
-							type='submit'
-							size={"sm"}
-							className='bg-transparent text-foreground hover:bg-transparent'
-						>
-							<Send />
-						</Button>
-					) : (
-						<Button
-							type='submit'
-							size={"sm"}
-							className='bg-transparent text-foreground hover:bg-transparent'
-						>
-						</Button>
-					)}
+					<Button
+						type='submit'
+						size={"sm"}
+						className='bg-transparent text-foreground hover:bg-transparent'
+						disabled={!msgText.trim()}
+					>
+						<Send />
+					</Button>
 				</div>
 			</form>
 		</div>
