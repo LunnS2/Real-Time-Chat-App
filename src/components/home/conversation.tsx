@@ -32,7 +32,8 @@ interface ConversationProps {
 
 const Conversation = ({ conversation }: ConversationProps) => {
   const conversationImage = conversation.groupImage;
-  const conversationName = conversation.groupName || conversation.name || "New Chat";
+  const conversationName =
+    conversation.groupName || conversation.name || "New Chat";
   const lastMessage = conversation.lastMessage;
 
   const { isAuthenticated } = useConvexAuth();
@@ -40,7 +41,8 @@ const Conversation = ({ conversation }: ConversationProps) => {
 
   const exitConversation = useMutation(api.conversations.exitConversation);
 
-  const { setSelectedConversation, selectedConversation } = useConversationStore();
+  const { setSelectedConversation, selectedConversation } =
+    useConversationStore();
   const activeBgClass = selectedConversation?._id === conversation._id;
 
   const handleExitConversation = async () => {
@@ -101,7 +103,10 @@ const Conversation = ({ conversation }: ConversationProps) => {
                 <DialogClose asChild>
                   <Button variant="outline">Cancel</Button>
                 </DialogClose>
-                <Button className="hover:bg-indigo-200" onClick={handleExitConversation}>
+                <Button
+                  className="hover:bg-indigo-200"
+                  onClick={handleExitConversation}
+                >
                   Exit
                 </Button>
               </DialogFooter>

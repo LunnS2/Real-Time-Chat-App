@@ -1,3 +1,4 @@
+// real-time-chat-app\src\store\chat-store.ts
 import { Id } from "../../convex/_generated/dataModel";
 import { create } from "zustand";
 

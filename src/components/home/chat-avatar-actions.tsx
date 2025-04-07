@@ -3,15 +3,8 @@ import { useMutation } from "convex/react";
 import { Ban, LogOut } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "../../../convex/_generated/api";
-import { Id } from "../../../convex/_generated/dataModel";
+import { User } from "@/types/user";
 import React from "react";
-
-type User = {
-  _id: Id<"users">;
-  name: string;
-  isOnline: boolean;
-  image?: string;
-};
 
 type ChatAvatarActionsProps = {
   message: IMessage;

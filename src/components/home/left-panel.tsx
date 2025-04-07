@@ -9,19 +9,29 @@ import { useConvexAuth, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useEffect, useMemo, useState } from "react";
 import { useConversationStore } from "@/store/chat-store";
+import { Id } from "../../../convex/_generated/dataModel";
 
 const LeftPanel = () => {
   const { isAuthenticated, isLoading } = useConvexAuth();
-  const conversations = useQuery(api.conversations.getMyConversations, isAuthenticated ? undefined : "skip");
+  const conversations = useQuery(
+    api.conversations.getMyConversations,
+    isAuthenticated ? undefined : "skip"
+  );
 
-  const { selectedConversation, setSelectedConversation } = useConversationStore();
+  const { selectedConversation, setSelectedConversation } =
+    useConversationStore();
 
   const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     if (conversations) {
-      const conversationIds = conversations.map((conversation) => conversation._id);
-      if (selectedConversation && !conversationIds.includes(selectedConversation._id)) {
+      const conversationIds = conversations.map(
+        (conversation) => conversation._id
+      );
+      if (
+        selectedConversation &&
+        !conversationIds.includes(selectedConversation._id)
+      ) {
         setSelectedConversation(null);
       }
     }
@@ -29,7 +39,8 @@ const LeftPanel = () => {
 
   const filteredConversations = useMemo(() => {
     return conversations?.filter((conversation) => {
-      const conversationName = conversation.groupName || conversation.name || "";
+      const conversationName =
+        conversation.groupName || conversation.name || "";
       return conversationName.toLowerCase().includes(searchTerm.toLowerCase());
     });
   }, [conversations, searchTerm]);
@@ -71,12 +82,25 @@ const LeftPanel = () => {
       <div className="my-3 flex flex-col gap-0 max-h-[80%] overflow-auto">
         {/* Filtered Conversations */}
         {filteredConversations?.map((conversation) => (
-          <Conversation key={conversation._id} conversation={conversation} />
+          <Conversation
+            key={conversation._id}
+            conversation={{
+              ...conversation,
+              lastMessage: conversation.lastMessage
+                ? {
+                    ...conversation.lastMessage,
+                    sender: conversation.lastMessage.sender as Id<"users">,
+                  }
+                : undefined,
+            }}
+          />
         ))}
 
         {/* Display message if no conversations found */}
         {filteredConversations?.length === 0 && (
-          <p className="text-center text-gray-500 text-sm mt-3">No conversations found</p>
+          <p className="text-center text-gray-500 text-sm mt-3">
+            No conversations found
+          </p>
         )}
       </div>
     </div>

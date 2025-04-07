@@ -1,3 +1,4 @@
+// real-time-chat-app\src\components\home\chat-bubble.tsx
 import { MessageSeenSvg } from "@/lib/svgs";
 import { IMessage, useConversationStore } from "@/store/chat-store";
 import ChatBubbleAvatar from "./chat-bubble-avatar";
@@ -7,14 +8,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription } from "../ui/dialog";
 import ReactPlayer from "react-player";
 import ChatAvatarActions from "./chat-avatar-actions";
-import { Id } from "../../../convex/_generated/dataModel";
-
-type User = {
-  _id: Id<"users">;
-  name: string;
-  isOnline: boolean;
-  image?: string;
-};
+import { User } from "@/types/user";
 
 type ChatBubbleProps = {
   message: IMessage;
@@ -141,7 +135,6 @@ const ImageMessage = ({
     </div>
   );
 };
-
 
 const ImageDialog = ({
   src,
