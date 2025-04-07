@@ -1,4 +1,3 @@
-// real-time-chat-app\src\components\home\chat-bubble.tsx
 import { MessageSeenSvg } from "@/lib/svgs";
 import { IMessage, useConversationStore } from "@/store/chat-store";
 import ChatBubbleAvatar from "./chat-bubble-avatar";
