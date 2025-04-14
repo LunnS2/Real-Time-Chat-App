@@ -31,9 +31,8 @@ interface ConversationProps {
 }
 
 const Conversation = ({ conversation }: ConversationProps) => {
-  const conversationImage = conversation.groupImage;
-  const conversationName =
-    conversation.groupName || conversation.name || "New Chat";
+  const conversationImage = conversation.groupImage || conversation.image;
+  const conversationName = conversation.groupName || conversation.name || "New Chat";
   const lastMessage = conversation.lastMessage;
 
   const { isAuthenticated } = useConvexAuth();
