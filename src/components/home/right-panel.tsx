@@ -9,14 +9,17 @@ import { useConversationStore } from "@/store/chat-store";
 import { useConvexAuth } from "convex/react";
 
 const RightPanel = () => {
-  const { selectedConversation, setSelectedConversation } = useConversationStore();
+  const { selectedConversation, setSelectedConversation } =
+    useConversationStore();
   const { isLoading } = useConvexAuth();
 
-  if (isLoading) return <Loader className="animate-spin"/>;
+  if (isLoading) return <Loader className="animate-spin" />;
   if (!selectedConversation) return <ChatPlaceHolder />;
 
-  const conversationName = selectedConversation.groupName || selectedConversation.name;
-  const conversationImage = selectedConversation.groupImage || selectedConversation.image;
+  const conversationName =
+    selectedConversation.groupName || selectedConversation.name;
+  const conversationImage =
+    selectedConversation.groupImage || selectedConversation.image;
 
   return (
     <div className="w-3/4 flex flex-col">

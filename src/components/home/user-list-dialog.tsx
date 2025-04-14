@@ -80,11 +80,6 @@ const UserListDialog = () => {
         });
       }
 
-      dialogCloseRef.current?.click();
-      setSelectedUsers([]);
-      setGroupName("");
-      setSelectedImage(null);
-
       const conversationName = isGroup
         ? groupName
         : users?.find((user) => user._id === selectedUsers[0])?.name || "";
@@ -107,10 +102,11 @@ const UserListDialog = () => {
     }
   };
 
-	const handleCancelCreation = () => {
-		// Everything on creation should be canceled/reset
-		// The user-list-dialog should close
-	}
+  const handleReset = () => {
+    setSelectedUsers([]);
+    setGroupName("");
+    setSelectedImage(null);
+  };
 
   useEffect(() => {
     if (!selectedImage) return setRenderedImage("");
@@ -208,7 +204,9 @@ const UserListDialog = () => {
           ))}
         </div>
         <div className="flex justify-between">
-          <Button onClick={handleCancelCreation} variant={"outline"}>Cancel</Button>
+          <Button onClick={handleReset} variant={"outline"}>
+            Reset
+          </Button>
           <Button
             onClick={handleCreateConversation}
             className="hover:bg-indigo-200"

@@ -11,76 +11,82 @@ import EmojiPicker, { Theme } from "emoji-picker-react";
 import MediaDropdown from "./media-dropdown";
 
 const MessageInput = () => {
-	const [msgText, setMsgText] = useState("");
-	const { selectedConversation } = useConversationStore();
-	
-	// Fixed line: Added explicit HTMLDivElement type
-	const { ref, isComponentVisible, setIsComponentVisible } = useComponentVisible<HTMLDivElement>(false);
+  const [msgText, setMsgText] = useState("");
+  const { selectedConversation } = useConversationStore();
 
-	const me = useQuery(api.users.getMe);
-	const sendTextMsg = useMutation(api.messages.sendTextMessage);
+  // Fixed line: Added explicit HTMLDivElement type
+  const { ref, isComponentVisible, setIsComponentVisible } =
+    useComponentVisible<HTMLDivElement>(false);
 
-	const handleSendTextMsg = async (e: React.FormEvent) => {
-		e.preventDefault();
-		try {
-			if (!selectedConversation?._id || !me?._id) {
-				toast.error("Missing conversation or user data");
-				return;
-			}
-			
-			await sendTextMsg({ 
-				content: msgText, 
-				conversation: selectedConversation._id, 
-				sender: me._id 
-			});
-			setMsgText("");
-		} catch (err) {
-			const error = err as Error;
-			toast.error(error.message);
-			console.error(error);
-		}
-	};
+  const me = useQuery(api.users.getMe);
+  const sendTextMsg = useMutation(api.messages.sendTextMessage);
 
-	return (
-		<div className='bg-gray-primary p-2 flex gap-4 items-center'>
-			<div className='relative flex gap-2 ml-2'>
-				<div ref={ref} onClick={() => setIsComponentVisible(true)}>
-					{isComponentVisible && (
-						<EmojiPicker
-							theme={Theme.DARK}
-							onEmojiClick={(emojiObject) => {
-								setMsgText((prev) => prev + emojiObject.emoji);
-							}}
-							style={{ position: "absolute", bottom: "1.5rem", left: "1rem", zIndex: 50 }}
-						/>
-					)}
-					<Laugh className='text-gray-600 dark:text-gray-400 cursor-pointer' />
-				</div>
-				<MediaDropdown />
-			</div>
-			<form onSubmit={handleSendTextMsg} className='w-full flex gap-3'>
-				<div className='flex-1'>
-					<Input
-						type='text'
-						placeholder='Type a message'
-						className='py-2 text-sm w-full rounded-lg shadow-sm bg-gray-tertiary focus-visible:ring-transparent'
-						value={msgText}
-						onChange={(e) => setMsgText(e.target.value)}
-					/>
-				</div>
-				<div className='mr-4 flex items-center gap-3'>
-					<Button
-						type='submit'
-						size={"sm"}
-						className='bg-transparent text-foreground hover:bg-transparent'
-						disabled={!msgText.trim()}
-					>
-						<Send />
-					</Button>
-				</div>
-			</form>
-		</div>
-	);
+  const handleSendTextMsg = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (!selectedConversation?._id || !me?._id) {
+        toast.error("Missing conversation or user data");
+        return;
+      }
+
+      await sendTextMsg({
+        content: msgText,
+        conversation: selectedConversation._id,
+        sender: me._id,
+      });
+      setMsgText("");
+    } catch (err) {
+      const error = err as Error;
+      toast.error(error.message);
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="bg-gray-primary p-2 flex gap-4 items-center">
+      <div className="relative flex gap-2 ml-2">
+        <div ref={ref} onClick={() => setIsComponentVisible(true)}>
+          {isComponentVisible && (
+            <EmojiPicker
+              theme={Theme.DARK}
+              onEmojiClick={(emojiObject) => {
+                setMsgText((prev) => prev + emojiObject.emoji);
+              }}
+              style={{
+                position: "absolute",
+                bottom: "1.5rem",
+                left: "1rem",
+                zIndex: 50,
+              }}
+            />
+          )}
+          <Laugh className="text-gray-600 dark:text-gray-400 cursor-pointer" />
+        </div>
+        <MediaDropdown />
+      </div>
+      <form onSubmit={handleSendTextMsg} className="w-full flex gap-3">
+        <div className="flex-1">
+          <Input
+            type="text"
+            placeholder="Type a message"
+            className="py-2 text-sm w-full rounded-lg shadow-sm bg-gray-tertiary focus-visible:ring-transparent"
+            value={msgText}
+            onChange={(e) => setMsgText(e.target.value)}
+          />
+        </div>
+        <div className="mr-4 flex items-center gap-3">
+          <Button
+            type="submit"
+            size={"sm"}
+            className="bg-transparent text-foreground hover:bg-transparent"
+            disabled={!msgText.trim()}
+          >
+            <Send />
+          </Button>
+        </div>
+      </form>
+    </div>
+  );
 };
 
 export default MessageInput;
