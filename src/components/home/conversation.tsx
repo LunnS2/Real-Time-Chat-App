@@ -94,9 +94,9 @@ const Conversation = ({ conversation }: ConversationProps) => {
             </DialogTrigger>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Exit Conversation</DialogTitle>
+                <DialogTitle>Delete Conversation</DialogTitle>
                 <DialogDescription>
-                  Are you sure you want to exit this conversation?
+                  Are you sure you want to delete this conversation?
                 </DialogDescription>
               </DialogHeader>
               <DialogFooter>
@@ -107,7 +107,7 @@ const Conversation = ({ conversation }: ConversationProps) => {
                   className="hover:bg-indigo-200"
                   onClick={handleExitConversation}
                 >
-                  Exit
+                  Delete
                 </Button>
               </DialogFooter>
             </DialogContent>
