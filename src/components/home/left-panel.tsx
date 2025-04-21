@@ -45,7 +45,7 @@ const LeftPanel = () => {
     });
   }, [conversations, searchTerm]);
 
-  if (isLoading) return <div className="p-3 text-center">Loading...</div>;
+  if (isLoading) return null;
 
   return (
     <div className="w-1/4 border-gray-600 border-r">
