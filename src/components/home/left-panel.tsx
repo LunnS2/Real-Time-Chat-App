@@ -1,16 +1,16 @@
 "use client";
-import { Search } from "lucide-react";
+
+import { Search, X } from "lucide-react";
 import { Input } from "../ui/input";
 import ThemeSwitch from "./theme-switch";
-import Conversation from "./conversation";
+import ConversationCard from "./conversation";
 import { UserButton } from "@clerk/nextjs";
 import UserListDialog from "./user-list-dialog";
 import { useConvexAuth, useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
-import { useEffect, useMemo, useState } from "react";
-import { useConversationStore } from "@/store/chat-store";
+import { useEffect, useMemo, useState, useRef } from "react";
+import { useConversationStore, type Conversation } from "@/store/chat-store";
 import { Id } from "../../../convex/_generated/dataModel";
-import { X } from "lucide-react";
 
 interface LeftPanelProps {
   open?: boolean;
@@ -29,13 +29,22 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
 
   const [searchTerm, setSearchTerm] = useState("");
 
+  const prevSelectedRef = useRef<Conversation | null>(null);
+  useEffect(() => {
+    if (
+      selectedConversation &&
+      prevSelectedRef.current?._id !== selectedConversation._id &&
+      onClose
+    ) {
+      onClose();
+    }
+    prevSelectedRef.current = selectedConversation ?? null;
+  }, [selectedConversation, onClose]);
+
   useEffect(() => {
     if (conversations) {
       const ids = conversations.map((c) => c._id);
-      if (
-        selectedConversation &&
-        !ids.includes(selectedConversation._id)
-      ) {
+      if (selectedConversation && !ids.includes(selectedConversation._id)) {
         setSelectedConversation(null);
       }
     }
@@ -58,7 +67,9 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
       {/* Backdrop on mobile */}
       <div
         className={`fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden transition-opacity ${
-          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+          open
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
       />
@@ -80,11 +91,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
           <div className="flex items-center gap-2">
             <ThemeSwitch />
             {onClose && (
-              <X
-              size={16}
-              className="cursor-pointer"
-              onClick={onClose}
-            />
+              <X size={16} className="cursor-pointer" onClick={onClose} />
             )}
           </div>
         </div>
@@ -109,7 +116,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
         {/* Conversations */}
         <div className="overflow-auto flex flex-col gap-0 px-1">
           {filtered?.map((c) => (
-            <Conversation
+            <ConversationCard
               key={c._id}
               conversation={{
                 ...c,
