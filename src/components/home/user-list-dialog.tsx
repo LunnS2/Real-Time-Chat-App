@@ -80,6 +80,11 @@ const UserListDialog = () => {
         });
       }
 
+      dialogCloseRef.current?.click();
+      setSelectedUsers([]);
+      setGroupName("");
+      setSelectedImage(null);
+
       const conversationName = isGroup
         ? groupName
         : users?.find((user) => user._id === selectedUsers[0])?.name || "";
