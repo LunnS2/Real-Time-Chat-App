@@ -1,3 +1,5 @@
+"use client";
+
 import ChatBubble from "./chat-bubble";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
@@ -41,15 +43,14 @@ const MessageContainer = () => {
       ref={chatContainerRef}
       className="relative p-3 flex-1 overflow-auto h-full bg-chat-tile-light dark:bg-chat-tile-dark"
     >
-      <div className="mx-12 flex flex-col gap-3">
+      <div className="mx-4 md:mx-12 flex flex-col gap-3">
         {messages?.map((msg, idx) => (
-          <div key={msg._id}>
-            <ChatBubble
-              message={msg}
-              me={safeUser}
-              previousMessage={idx > 0 ? messages[idx - 1] : undefined}
-            />
-          </div>
+          <ChatBubble
+            key={msg._id}
+            message={msg}
+            me={safeUser}
+            previousMessage={idx > 0 ? messages[idx - 1] : undefined}
+          />
         ))}
       </div>
     </div>

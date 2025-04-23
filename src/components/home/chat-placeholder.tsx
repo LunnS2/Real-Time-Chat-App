@@ -1,11 +1,12 @@
+"use client";
 import Image from "next/image";
 
 const ChatPlaceHolder = () => {
   return (
-    <div className="w-3/4 bg-gray-secondary flex flex-col items-center justify-center py-10">
-      <div className="flex flex-col items-center w-full justify-center py-10 gap-4">
+    <div className="flex-1 bg-gray-secondary flex flex-col items-center justify-center py-10">
+      <div className="flex flex-col items-center justify-center gap-4">
         <Image
-          src={"/logo SVG - 6 colors tracing.svg"}
+          src="/logo SVG - 6 colors tracing.svg"
           alt="Hero"
           width={320}
           height={188}

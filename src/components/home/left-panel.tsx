@@ -10,8 +10,14 @@ import { api } from "../../../convex/_generated/api";
 import { useEffect, useMemo, useState } from "react";
 import { useConversationStore } from "@/store/chat-store";
 import { Id } from "../../../convex/_generated/dataModel";
+import { X } from "lucide-react";
 
-const LeftPanel = () => {
+interface LeftPanelProps {
+  open?: boolean;
+  onClose?: () => void;
+}
+
+const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const conversations = useQuery(
     api.conversations.getMyConversations,
@@ -25,47 +31,70 @@ const LeftPanel = () => {
 
   useEffect(() => {
     if (conversations) {
-      const conversationIds = conversations.map(
-        (conversation) => conversation._id
-      );
+      const ids = conversations.map((c) => c._id);
       if (
         selectedConversation &&
-        !conversationIds.includes(selectedConversation._id)
+        !ids.includes(selectedConversation._id)
       ) {
         setSelectedConversation(null);
       }
     }
   }, [conversations, selectedConversation, setSelectedConversation]);
 
-  const filteredConversations = useMemo(() => {
-    return conversations?.filter((conversation) => {
-      const conversationName =
-        conversation.groupName || conversation.name || "";
-      return conversationName.toLowerCase().includes(searchTerm.toLowerCase());
-    });
-  }, [conversations, searchTerm]);
+  const filtered = useMemo(
+    () =>
+      conversations?.filter((c) =>
+        (c.groupName || c.name || "")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase())
+      ),
+    [conversations, searchTerm]
+  );
 
   if (isLoading) return null;
 
   return (
-    <div className="w-1/4 border-gray-600 border-r">
-      <div className="sticky top-0 bg-left-panel z-10">
-        {/* Header */}
-        <div className="flex justify-between bg-gray-primary p-3 items-center">
-          <UserButton />
+    <>
+      {/* Backdrop on mobile */}
+      <div
+        className={`fixed inset-0 bg-black bg-opacity-30 z-40 md:hidden transition-opacity ${
+          open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        onClick={onClose}
+      />
 
+      <div
+        className={`
+          fixed top-0 left-0 z-40 h-full w-3/4 max-w-xs bg-left-panel border-r border-gray-600
+          transform transition-transform duration-300 ease-in-out
+          ${open ? "translate-x-0" : "-translate-x-full"}
+          md:static md:translate-x-0 md:w-1/4
+        `}
+      >
+        {/* Header */}
+        <div className="sticky top-0 z-30 bg-gray-primary flex items-center justify-between p-3">
           <div className="flex items-center gap-3">
+            <UserButton />
             {isAuthenticated && <UserListDialog />}
+          </div>
+          <div className="flex items-center gap-2">
             <ThemeSwitch />
+            {onClose && (
+              <X
+              size={16}
+              className="cursor-pointer"
+              onClick={onClose}
+            />
+            )}
           </div>
         </div>
 
         {/* Search */}
         <div className="p-3 flex items-center">
-          <div className="relative h-10 mx-3 flex-1">
+          <div className="relative flex-1 h-10 mx-3">
             <Search
-              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10"
               size={18}
+              className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 z-10"
             />
             <Input
               type="text"
@@ -76,34 +105,31 @@ const LeftPanel = () => {
             />
           </div>
         </div>
-      </div>
 
-      {/* Chat List */}
-      <div className="my-3 flex flex-col gap-0 max-h-[80%] overflow-auto">
-        {/* Filtered Conversations */}
-        {filteredConversations?.map((conversation) => (
-          <Conversation
-            key={conversation._id}
-            conversation={{
-              ...conversation,
-              lastMessage: conversation.lastMessage
-                ? {
-                    ...conversation.lastMessage,
-                    sender: conversation.lastMessage.sender as Id<"users">,
-                  }
-                : undefined,
-            }}
-          />
-        ))}
-
-        {/* Display message if no conversations found */}
-        {filteredConversations?.length === 0 && (
-          <p className="text-center text-gray-500 text-sm mt-3">
-            No conversations found
-          </p>
-        )}
+        {/* Conversations */}
+        <div className="overflow-auto flex flex-col gap-0 px-1">
+          {filtered?.map((c) => (
+            <Conversation
+              key={c._id}
+              conversation={{
+                ...c,
+                lastMessage: c.lastMessage
+                  ? {
+                      ...c.lastMessage,
+                      sender: c.lastMessage.sender as Id<"users">,
+                    }
+                  : undefined,
+              }}
+            />
+          ))}
+          {filtered?.length === 0 && (
+            <p className="text-center text-gray-500 text-sm mt-3">
+              No conversations found
+            </p>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
