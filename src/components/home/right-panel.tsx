@@ -13,7 +13,12 @@ const RightPanel = () => {
     useConversationStore();
   const { isLoading } = useConvexAuth();
 
-  if (isLoading) return <Loader className="animate-spin" />;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-screen w-screen">
+        <Loader className="animate-spin" />
+      </div>
+    );
   if (!selectedConversation) return <ChatPlaceHolder />;
 
   const name = selectedConversation.groupName || selectedConversation.name;

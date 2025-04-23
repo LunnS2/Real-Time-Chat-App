@@ -16,7 +16,7 @@ export default function ChatLayout() {
       {/* MAIN CONTENT */}
       <div className="flex-1 flex flex-col">
         {/* Mobile header with hamburger */}
-        <div className="md:hidden flex items-center bg-gray-primary p-2">
+        <div className="md:hidden flex items-center bg-gray-primary p-3">
           <Menu
             size={24}
             className="cursor-pointer"

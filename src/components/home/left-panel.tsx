@@ -91,7 +91,7 @@ const LeftPanel: React.FC<LeftPanelProps> = ({ open = true, onClose }) => {
           <div className="flex items-center gap-2">
             <ThemeSwitch />
             {onClose && (
-              <X size={16} className="cursor-pointer" onClick={onClose} />
+              <X size={16} className="md:hidden cursor-pointer" onClick={onClose} />
             )}
           </div>
         </div>
